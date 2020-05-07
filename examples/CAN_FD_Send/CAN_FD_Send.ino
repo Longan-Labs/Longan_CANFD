@@ -3,9 +3,13 @@
 #include <ACAN2517FD.h>
 #include <SPI.h>
 
-
+// FOR CAN-FD SHIELD: https://www.longan-labs.cc/1030012.html
 static const byte MCP2517_CS  = 9 ; // CS input of MCP2517
 static const byte MCP2517_INT =  2 ; // INT output of MCP2517
+
+// FOR CANBed-FD: https://www.longan-labs.cc/1030009.html
+//static const byte MCP2517_CS  = 17 ; // CS input of MCP2517
+//static const byte MCP2517_INT =  7 ; // INT output of MCP2517
 
 ACAN2517FD can (MCP2517_CS, SPI, MCP2517_INT) ;
 
@@ -38,6 +42,7 @@ void setup () {
     //--- Begin
     const uint32_t errorCode = can.begin (settings, [] { can.isr () ; }) ;
     if (errorCode == 0) {
+        Serial.println("CAN INIT OK!");
         Serial.print ("Bit Rate prescaler: ") ;
         Serial.println (settings.mBitRatePrescaler) ;
         Serial.print ("Arbitration Phase segment 1: ") ;

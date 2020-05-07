@@ -194,9 +194,6 @@ class ACAN2517FD {
   public: bool isr_core (void) ;
   private: void receiveInterrupt (void) ;
   private: void transmitInterrupt (void) ;
-  #ifdef ARDUINO_ARCH_ESP32
-    public: SemaphoreHandle_t mISRSemaphore ;
-  #endif
 
 //······················································································································
 //    No copy
