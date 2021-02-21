@@ -773,7 +773,16 @@ int8_t mcp2518fd::mcp2518fd_FilterObjectConfigure(CAN_FILTER filter,
   fObj.bF = *id;
   a = cREGADDR_CiFLTOBJ + (filter * CiFILTER_OFFSET);
 
+  Serial.print("FILT-");
+  Serial.println(a);
+  
+  //fObj.word |= 0x20000000;
+  
+  Serial.println(fObj.word, HEX);
+  
   spiTransferError = mcp2518fd_WriteWord(a, fObj.word);
+  
+  
 
   return spiTransferError;
 }
@@ -788,7 +797,9 @@ int8_t mcp2518fd::mcp2518fd_FilterMaskConfigure(CAN_FILTER filter,
   mObj.word = 0;
   mObj.bF = *mask;
   a = cREGADDR_CiMASK + (filter * CiFILTER_OFFSET);
-
+  Serial.print("MASK-");
+  Serial.println(a);
+  Serial.println(mObj.word, HEX);
   spiTransferError = mcp2518fd_WriteWord(a, mObj.word);
 
   return spiTransferError;
@@ -1924,6 +1935,7 @@ byte mcp2518fd::init_Mask(byte num, byte ext, unsigned long ulData) {
 *********************************************************************************************************/
 byte mcp2518fd::init_Filt(byte num, byte ext, unsigned long ulData) {
   int8_t err;
+  
   err = mcp2518fd_OperationModeSelect(CAN_CONFIGURATION_MODE);
 
   // Setup RX Filter
@@ -1935,8 +1947,72 @@ byte mcp2518fd::init_Filt(byte num, byte ext, unsigned long ulData) {
   }
   fObj.bF.EXIDE = !!ext;
   mcp2518fd_FilterObjectConfigure((CAN_FILTER)num, &fObj.bF);
+
   mcp2518fd_OperationModeSelect(mcpMode);
   return err;
+}
+
+// 
+byte mcp2518fd::CANFDSPI_FilterDisable(CAN_FILTER filter)
+{
+    uint16_t a;
+    REG_CiFLTCON_BYTE fCtrl;
+    int8_t spiTransferError = 0;
+
+    // Read
+    a = cREGADDR_CiFLTCON + filter;
+
+    // mcp2518fd_ReadByte(uint16_t address, uint8_t *rxd)
+    spiTransferError = mcp2518fd_ReadByte(a, &fCtrl.byte);
+    if (spiTransferError) {
+        return -1;
+    }
+
+    // Modify
+    fCtrl.bF.Enable = 0;
+
+    // mcp2518fd_WriteByte(uint16_t address, uint8_t txd)
+    spiTransferError = mcp2518fd_WriteByte(a, fCtrl.byte);
+    if (spiTransferError) {
+        return -2;
+    }
+
+    return spiTransferError;
+}
+
+byte mcp2518fd::init_Filt_Mask(byte num, byte ext, unsigned long f, unsigned long m)
+{
+    CANFDSPI_FilterDisable(num);
+    CAN_FILTEROBJ_ID fObj;
+    fObj.SID = f;
+    fObj.SID11 = 0;
+    fObj.EID = ext;
+    fObj.EXIDE = 0;
+    
+    /*mcp2518fd_FilterObjectConfigure(CAN_FILTER filter,
+                                                  CAN_FILTEROBJ_ID *id)*/
+   
+    mcp2518fd_FilterObjectConfigure(num, &fObj);
+    
+    CAN_MASKOBJ_ID mObj;
+    mObj.MSID = m;
+    mObj.MSID11 = 0;
+    mObj.MEID = ext;
+    mObj.MIDE = 1;
+    
+    /*mcp2518fd_FilterMaskConfigure(CAN_FILTER filter,
+                                                CAN_MASKOBJ_ID *mask) */
+    
+    mcp2518fd_FilterMaskConfigure(num, &mObj);
+    
+    
+    /*mcp2518fd_FilterToFifoLink(CAN_FILTER filter,
+                                             CAN_FIFO_CHANNEL channel,
+                                             bool enable)*/
+                                             
+    bool filterEnable = true;                                         
+    mcp2518fd_FilterToFifoLink(num, APP_RX_FIFO, filterEnable);
+    
 }
 
 /*********************************************************************************************************

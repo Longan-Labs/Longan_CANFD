@@ -31,7 +31,7 @@ void loop() {
     CAN.sendMsgBuf(0x01, 0, 8, stmp);
     delay(10);
     CAN.sendMsgBuf(0x04, 0, 8, stmp);
-    delay(100);                       // send data per 100ms
+    delay(500);                       // send data per 100ms
     Serial.println("CAN BUS sendMsgBuf ok!");
 }
 

@@ -116,6 +116,11 @@ public:
   virtual byte init_Mask(byte num, byte ext, unsigned long ulData);
   virtual byte init_Filt(byte num, byte ext,
                          unsigned long ulData); // init filters
+                         
+  virtual byte CANFDSPI_FilterDisable(CAN_FILTER filter);
+                         
+  virtual byte init_Filt_Mask(byte num, byte ext, unsigned long f, unsigned long m);
+  
   virtual void setSleepWakeup(const byte enable);
   virtual byte sleep();
   virtual byte wake();
