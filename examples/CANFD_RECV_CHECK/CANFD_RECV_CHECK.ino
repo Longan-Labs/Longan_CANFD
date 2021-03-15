@@ -54,16 +54,17 @@ void setup() {
 
 }
 
-
 void loop() 
 {
     
     if (CAN_MSGAVAIL == CAN.checkReceive()) 
     {
+        CAN.readMsgBuf(&len, buf);            // You should call readMsgBuff before getCanId
+        unsigned long id = CAN.getCanId();
+        
         Serial.print("Get Data From id: ");
-        Serial.println(CAN.getCanId());
+        Serial.println(id);
         Serial.print("Len = ");
-        CAN.readMsgBuf(&len, buf);
         Serial.println(len);
             // print the data
         for (int i = 0; i < len; i++) {
@@ -73,6 +74,8 @@ void loop()
         Serial.println();
     }
 }
+
+
 
 /*********************************************************************************************************
     END FILE

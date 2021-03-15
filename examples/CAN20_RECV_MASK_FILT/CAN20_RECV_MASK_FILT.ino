@@ -41,25 +41,27 @@ void setup() {
 }
 
 
-void loop() {
+void loop() 
+{
     
-    if (CAN_MSGAVAIL == CAN.checkReceive()) {                // check if get data
-
-        flagRecv = 0;                // clear flag
-        CAN.readMsgBuf(&len, buf);    // read data,  len: data length, buf: data buf
-
-        Serial.println("\r\n------------------------------------------------------------------");
+    if (CAN_MSGAVAIL == CAN.checkReceive()) 
+    {
+        CAN.readMsgBuf(&len, buf);            // You should call readMsgBuff before getCanId
+        unsigned long id = CAN.getCanId();
+        
         Serial.print("Get Data From id: ");
-        Serial.println(CAN.getCanId());
-        for (int i = 0; i < len; i++) { // print the data
-            Serial.print("0x");
-            Serial.print(buf[i], HEX);
+        Serial.println(id);
+        Serial.print("Len = ");
+        Serial.println(len);
+            // print the data
+        for (int i = 0; i < len; i++) {
+            Serial.print(buf[i]); 
             Serial.print("\t");
         }
         Serial.println();
     }
-
 }
+
 
 /*********************************************************************************************************
     END FILE
