@@ -1,6 +1,9 @@
-/* MCP2517/8 receive a CAN-FD frame with FILTER AND MASK SETTING
+/*  MCP2517/8 receive a CAN-FD frame with FILTER AND MASK SETTING
 
-can-fd baud rate:
+    CAN FD Shield - https://www.longan-labs.cc/1030012.html
+    CANBed FD - https://www.longan-labs.cc/1030009.html
+  
+    can-fd baud rate:
 
     CAN_125K_500K
     CAN_250K_500K
@@ -42,7 +45,7 @@ void setup() {
     while (!Serial) {
         ; // wait for serial port to connect. Needed for native USB port only
     }
-    //attachInterrupt(digitalPinToInterrupt(CAN_INT_PIN), CAN_ISR, FALLING); // start interrupt
+
     CAN.setMode(CAN_NORMAL_MODE);
 
     // init can bus : arbitration bitrate = 500k, data bitrate = 1M
@@ -85,6 +88,4 @@ void loop()
     }
 }
 
-/*********************************************************************************************************
-    END FILE
-*********************************************************************************************************/
+// END FILE

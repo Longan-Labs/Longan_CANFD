@@ -103,13 +103,20 @@ int8_t mcp2518fd::mcp2518fd_ReadByte(uint16_t address, uint8_t *rxd) {
 #ifdef SPI_HAS_TRANSACTION
   SPI_BEGIN();
 #endif
+  //Serial.println("11");
   MCP2518fd_SELECT();
+  //Serial.println("12");
   spi_readwrite(spiTransmitBuffer[0]);
+  //Serial.println("13");
   spi_readwrite(spiTransmitBuffer[1]);
+  //Serial.println("14");
   spiReceiveBuffer[2] = spi_readwrite(0x00);
+  //Serial.println("15");
   MCP2518fd_UNSELECT();
+  //Serial.println("16");
 #ifdef SPI_HAS_TRANSACTION
   SPI_END();
+  //Serial.println("17");
 #endif
   // Update data
   *rxd = spiReceiveBuffer[2];
@@ -1165,22 +1172,24 @@ int8_t mcp2518fd::mcp2518fd_OperationModeSelect(CAN_OPERATION_MODE opMode) {
   uint8_t d = 0;
   int8_t spiTransferError = 0;
 
+    //Serial.println(1);
   // Read
   spiTransferError = mcp2518fd_ReadByte(cREGADDR_CiCON + 3, &d);
   if (spiTransferError) {
     return -1;
   }
-
+   // Serial.println(2);
   // Modify
   d &= ~0x07;
   d |= opMode;
 
   // Write
   spiTransferError = mcp2518fd_WriteByte(cREGADDR_CiCON + 3, d);
+ // Serial.println(3);
   if (spiTransferError) {
     return -2;
   }
-
+   // Serial.println(4);
   return spiTransferError;
 }
 
@@ -1897,7 +1906,7 @@ uint8_t mcp2518fd::mcp2518fd_init(uint32_t speedset, const byte clock) {
 
   // Select Normal Mode
   // mcp2518fd_OperationModeSelect(CAN_CLASSIC_MODE);
-  setMode(mcpMode);
+  __setMode(mcpMode);
 
   return 0;
 }
@@ -1982,7 +1991,7 @@ byte mcp2518fd::CANFDSPI_FilterDisable(CAN_FILTER filter)
 
 byte mcp2518fd::init_Filt_Mask(byte num, byte ext, unsigned long f, unsigned long m)
 {
-    CANFDSPI_FilterDisable(num);
+    CANFDSPI_FilterDisable((CAN_FILTER)num);
     CAN_FILTEROBJ_ID fObj;
     fObj.SID = f;
     fObj.SID11 = 0;
@@ -1992,7 +2001,7 @@ byte mcp2518fd::init_Filt_Mask(byte num, byte ext, unsigned long f, unsigned lon
     /*mcp2518fd_FilterObjectConfigure(CAN_FILTER filter,
                                                   CAN_FILTEROBJ_ID *id)*/
    
-    mcp2518fd_FilterObjectConfigure(num, &fObj);
+    mcp2518fd_FilterObjectConfigure((CAN_FILTER)num, &fObj);
     
     CAN_MASKOBJ_ID mObj;
     mObj.MSID = m;
@@ -2003,7 +2012,7 @@ byte mcp2518fd::init_Filt_Mask(byte num, byte ext, unsigned long f, unsigned lon
     /*mcp2518fd_FilterMaskConfigure(CAN_FILTER filter,
                                                 CAN_MASKOBJ_ID *mask) */
     
-    mcp2518fd_FilterMaskConfigure(num, &mObj);
+    mcp2518fd_FilterMaskConfigure((CAN_FILTER)num, &mObj);
     
     
     /*mcp2518fd_FilterToFifoLink(CAN_FILTER filter,
@@ -2011,7 +2020,7 @@ byte mcp2518fd::init_Filt_Mask(byte num, byte ext, unsigned long f, unsigned lon
                                              bool enable)*/
                                              
     bool filterEnable = true;                                         
-    mcp2518fd_FilterToFifoLink(num, APP_RX_FIFO, filterEnable);
+    mcp2518fd_FilterToFifoLink((CAN_FILTER)num, APP_RX_FIFO, filterEnable);
     
 }
 
@@ -2065,10 +2074,10 @@ byte mcp2518fd::getMode() {
 }
 
 /*********************************************************************************************************
-** Function name:           setMode
+** Function name:           __setMode
 ** Descriptions:            Sets control mode
 *********************************************************************************************************/
-byte mcp2518fd::setMode(const byte opMode) {
+byte mcp2518fd::__setMode(const byte opMode) {
   if ((CAN_OPERATION_MODE)opMode !=
       CAN_SLEEP_MODE) { // if going to sleep, the value stored in opMode is not
                         // changed so that we can return to it later

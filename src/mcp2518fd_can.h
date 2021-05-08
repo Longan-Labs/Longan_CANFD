@@ -4,7 +4,7 @@
 #define _MCP2518FD_H_
 
 #include "mcp2518fd_can_dfs.h"
-#include "mcp_can.h"
+#include "mcp_can_fd.h"
 #include <Arduino.h>
 #include <SPI.h>
 
@@ -124,7 +124,16 @@ public:
   virtual void setSleepWakeup(const byte enable);
   virtual byte sleep();
   virtual byte wake();
-  virtual byte setMode(const byte opMode);
+  virtual byte __setMode(const byte opMode);
+
+  virtual byte setMode(const byte opMode)
+    {
+    if ((CAN_OPERATION_MODE)opMode !=
+    CAN_SLEEP_MODE) { // if going to sleep, the value stored in opMode is not
+                        // changed so that we can return to it later
+        mcpMode = (CAN_OPERATION_MODE)opMode;
+    }
+  }
   virtual byte getMode();
   virtual byte checkError(uint8_t* err_ptr = NULL);
 

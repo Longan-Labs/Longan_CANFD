@@ -68,7 +68,7 @@ public:
                                          // (If disabled the MCP2515 will not be woken up by CAN bus activity, making it send only)
     virtual byte sleep() = 0;                                                           // Put the MCP2515 in sleep mode
     virtual byte wake() = 0;                                                            // Wake MCP2515 manually from sleep
-    virtual byte setMode(byte opMode) = 0;                                              // Set operational mode
+    virtual byte __setMode(byte opMode) = 0;                                              // Set operational mode
     virtual byte getMode() = 0;                                                         // Get operational mode
     virtual byte checkError(uint8_t* err_ptr = NULL) = 0;                               // if something error
 

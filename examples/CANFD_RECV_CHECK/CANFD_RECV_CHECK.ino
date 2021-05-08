@@ -1,6 +1,9 @@
-/* MCP2517/8 receive a CAN-FD frame with interrupt
+/*  MCP2517/8 receive a CAN-FD frame with interrupt
 
-can-fd baud rate:
+    CAN FD Shield - https://www.longan-labs.cc/1030012.html
+    CANBed FD - https://www.longan-labs.cc/1030009.html
+
+    can-fd baud rate:
 
     CAN_125K_500K
     CAN_250K_500K
@@ -75,8 +78,4 @@ void loop()
     }
 }
 
-
-
-/*********************************************************************************************************
-    END FILE
-*********************************************************************************************************/
+// END FILE

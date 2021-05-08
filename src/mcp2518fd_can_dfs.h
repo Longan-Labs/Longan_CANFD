@@ -47,7 +47,7 @@ DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 
 #include <Arduino.h>
 #include <inttypes.h>
-#include "mcp_can.h"
+#include "mcp_can_fd.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus // Provide C++ Compatibility

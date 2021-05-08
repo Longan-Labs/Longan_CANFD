@@ -1,18 +1,19 @@
 // MCP2517/8 receive a CAN2.0 frame with Mask and Filter setting
+// CAN FD Shield - https://www.longan-labs.cc/1030012.html
+// CANBed FD - https://www.longan-labs.cc/1030009.html
 
 #include <SPI.h>
 #include "mcp2518fd_can.h"
 
-// pin for CAN-FD Shield
+// pins for CAN-FD Shield
 //const int SPI_CS_PIN = 9;
 //const int CAN_INT_PIN = 2;
 
-// pin for CANBed FD
+// pins for CANBed FD
 const int SPI_CS_PIN = 17;
 const int CAN_INT_PIN = 7;
 
 mcp2518fd CAN(SPI_CS_PIN); // Set CS pin
-
 
 unsigned char flagRecv = 0;
 unsigned char len = 0;
@@ -30,10 +31,10 @@ void setup() {
     }
     Serial.println("CAN init ok!");
 
-    int filtn = 0;      // 0~31, 32 mask and filter
-    int ext   = 0;      // 0: standard frame, 1: ext frame
-    int filter = 0x04;  // filter
-    int mask   = 0x7ff; // mask
+    int filtn   = 0;      // 0~31, 32 mask and filter
+    int ext     = 0;      // 0: standard frame, 1: ext frame
+    int filter  = 0x04;  // filter
+    int mask    = 0x7ff; // mask
     
     CAN.init_Filt_Mask(filtn, ext, 0x04, 0x7ff);
     
@@ -53,7 +54,7 @@ void loop()
         Serial.println(id);
         Serial.print("Len = ");
         Serial.println(len);
-            // print the data
+        // PRINT DATA
         for (int i = 0; i < len; i++) {
             Serial.print(buf[i]); 
             Serial.print("\t");
@@ -63,6 +64,4 @@ void loop()
 }
 
 
-/*********************************************************************************************************
-    END FILE
-*********************************************************************************************************/
+// END FILE

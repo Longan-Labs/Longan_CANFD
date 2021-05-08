@@ -1,15 +1,17 @@
 // MCP2517/8 send a CAN frame
+// CAN FD Shield - https://www.longan-labs.cc/1030012.html
+// CANBed FD - https://www.longan-labs.cc/1030009.html
 
 #include <SPI.h>
 #include "mcp2518fd_can.h"
 
-// pin for CAN-FD Shield
-const int SPI_CS_PIN = 9;
-const int CAN_INT_PIN = 2;
+// pins for CAN-FD Shield
+//const int SPI_CS_PIN = 9;
+//const int CAN_INT_PIN = 2;
 
-// pin for CANBed FD
-// const int SPI_CS_PIN = 17;
-// const int CAN_INT_PIN = 7;
+// pins for CANBed FD
+const int SPI_CS_PIN = 17;
+const int CAN_INT_PIN = 7;
 
 mcp2518fd CAN(SPI_CS_PIN); // Set CS pin
 

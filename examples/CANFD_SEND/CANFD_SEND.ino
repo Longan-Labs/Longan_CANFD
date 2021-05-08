@@ -1,6 +1,9 @@
-/* MCP2517/8 send a can fd frame
+/*  MCP2517/8 send a can fd frame
 
-can-fd baud rate:
+    CAN FD Shield - https://www.longan-labs.cc/1030012.html
+    CANBed FD - https://www.longan-labs.cc/1030009.html
+    
+    can-fd baud rate:
 
     CAN_125K_500K
     CAN_250K_500K
