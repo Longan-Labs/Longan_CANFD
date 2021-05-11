@@ -116,7 +116,7 @@ void loop()
 // END FILE
 ```
 
-## Dev board by Longan Labs
+## Get a Dev Board
 
 If you need a Dev board, plese try,
 
