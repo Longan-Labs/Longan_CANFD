@@ -1,5 +1,9 @@
 # Longan Labs CAN FD Library 
 
+[![Tests](https://github.com/arduino/compile-sketches/workflows/Test%20Python%20code/badge.svg)](https://github.com/arduino/compile-sketches/actions?workflow=Test+Python+code)
+[![Spell Check](https://github.com/arduino/compile-sketches/workflows/Spell%20Check/badge.svg)](https://github.com/arduino/compile-sketches/actions?workflow=Spell+Check)
+[![codecov](https://codecov.io/gh/arduino/compile-sketches/branch/main/graph/badge.svg?token=Uv6f1ebMZ4)](https://codecov.io/gh/arduino/compile-sketches)
+
 Arduino library for MCP2517/MCP2518, it's available for most of theArduino boards, we test it with Arduino UNO, Leonardo, Mega as well as Zero.
 
 With this library, you can,
