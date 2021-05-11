@@ -94,6 +94,12 @@ If you need a Dev board, plese try,
 
 [![](https://www.longan-labs.cc/media/catalog/product/cache/ecd051e9670bd57df35c8f0b122d8aea/1/0/1030009-1.jpg)](https://www.longan-labs.cc/1030009.html)
 
+
+|DEV|PICTURE|GET ONE|
+|---|-------|-------|
+|CAN FD Shield|![](https://www.longan-labs.cc/media/catalog/product/cache/ecd051e9670bd57df35c8f0b122d8aea/1/0/1030012-2_2.jpg)|[GET ONE NOW](https://www.longan-labs.cc/1030012.html)|
+|CANBed FD|![](https://www.longan-labs.cc/media/catalog/product/cache/ecd051e9670bd57df35c8f0b122d8aea/1/0/1030009-1.jpg)|[GET ONE NOW](https://www.longan-labs.cc/1030009.html)|
+
 ## Contact us
 
 If you have any question, please feel free to contact [support@longan-labs.cc](support@longan-labs.cc)
