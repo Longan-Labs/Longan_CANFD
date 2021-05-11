@@ -40,7 +40,7 @@ With this library, you can,
 
 here are many examples implemented in this library. One of the examples is below. You can find other examples [here](./examples)
 
-```Arduino
+```Cpp
 /*  MCP2517/8 send a can fd frame
     CAN FD Shield - https://www.longan-labs.cc/1030012.html
     CANBed FD - https://www.longan-labs.cc/1030009.html
