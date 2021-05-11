@@ -1,5 +1,3 @@
-![](https://www.longan-labs.cc/media/catalog/category/Categories-32.png)
-
 # Longan Labs CAN FD Library
 
 Arduino library for MCP2517/MCP2518, it's available for most of theArduino boards, we test it with Arduino UNO, Leonardo, Mega as well as Zero.
@@ -11,6 +9,8 @@ With this library, you can,
 3. Send a CAN FD frame
 4. Send a CAN FD frame
 5. Set the masks and filters, there're 32 masks and filters. 
+
+![](https://www.longan-labs.cc/media/catalog/category/Categories-32.png)
 
 ## Installation
 
