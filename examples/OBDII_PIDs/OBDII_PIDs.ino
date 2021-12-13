@@ -38,11 +38,9 @@ unsigned char PID_INPUT;
 unsigned char getPid    = 0;
 
 void set_mask_filt() {
-
     // init_Filt_Mask(filter number, ext, filter, mask)
     // There're 32 set of filter/mask for MCP2517FD, filter number can be set to 0~31
     CAN.init_Filt_Mask(0, 0, 0x7E8, 0x7FC);  
-    
 }
 
 void sendPid(unsigned char __pid) {

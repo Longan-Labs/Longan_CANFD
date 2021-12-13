@@ -30,8 +30,7 @@ With this library, you can,
 ## Functions
 
 - begin()
-- init_Mask()
-- init_filt()
+- init_Filt_Mask()
 - checkReceive()
 - readMsgBufID()
 - readMsgBuf()
