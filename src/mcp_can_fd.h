@@ -29,29 +29,29 @@ typedef enum {
 
 typedef enum {
     CAN_NOBPS,
-    CAN_5KBPS,
-    CAN_10KBPS,
-    CAN_20KBPS,
-    CAN_25KBPS,
-    CAN_31K25BPS,
-    CAN_33KBPS  ,
-    CAN_40KBPS  ,
-    CAN_50KBPS  ,
-    CAN_80KBPS  ,
-    CAN_83K3BPS ,
-    CAN_95KBPS  ,
-    CAN_100KBPS ,
-    CAN_125KBPS ,
-    CAN_200KBPS ,
-    CAN_250KBPS ,
-    CAN_500KBPS ,
-    CAN_666KBPS ,
-    CAN_800KBPS ,
-    CAN_1000KBPS
+    CANFD_5KBPS,
+    CANFD_10KBPS,
+    CANFD_20KBPS,
+    CANFD_25KBPS,
+    CANFD_31K25BPS,
+    CANFD_33KBPS  ,
+    CANFD_40KBPS  ,
+    CANFD_50KBPS  ,
+    CANFD_80KBPS  ,
+    CANFD_83K3BPS ,
+    CANFD_95KBPS  ,
+    CANFD_100KBPS ,
+    CANFD_125KBPS ,
+    CANFD_200KBPS ,
+    CANFD_250KBPS ,
+    CANFD_500KBPS ,
+    CANFD_666KBPS ,
+    CANFD_800KBPS ,
+    CANFD_1000KBPS
 } MCP_BITTIME_SETUP;
 
 
-class MCP_CAN
+class MCP_CAN_1
 {
 public:
     virtual void enableTxInterrupt(bool enable = true) = 0;                             // enable transmit interrupt
@@ -62,8 +62,6 @@ public:
      * clockset be in MCP_CLOCK_T
      */
     virtual byte begin(uint32_t speedset, const byte clockset) = 0;                     // init can
-    virtual byte init_Mask(byte num, byte ext, unsigned long ulData) = 0;               // init Masks
-    virtual byte init_Filt(byte num, byte ext, unsigned long ulData) = 0;               // init filters
     virtual void setSleepWakeup(byte enable) = 0;                                       // Enable or disable the wake up interrupt
                                          // (If disabled the MCP2515 will not be woken up by CAN bus activity, making it send only)
     virtual byte sleep() = 0;                                                           // Put the MCP2515 in sleep mode
@@ -103,7 +101,7 @@ public:
     virtual byte mcpDigitalRead(const byte pin) = 0;                                    // read HIGH or LOW from supported pins
 
 public:
-    MCP_CAN(byte _CS);
+    MCP_CAN_1(byte _CS);
     void init_CS(byte _CS); // define CS after construction before begin()
     void setSPI(SPIClass *_pSPI);
 

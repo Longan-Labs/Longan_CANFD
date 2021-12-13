@@ -19,7 +19,7 @@ void setup() {
     Serial.begin(115200);
     while(!Serial){};
 
-    while (CAN_OK != CAN.begin(CAN_500KBPS)) {             // init can bus : baudrate = 500k
+    while (CAN_OK != CAN.begin(CANFD_500KBPS)) {             // init can bus : baudrate = 500k
         Serial.println("CAN init fail, retry...");
         delay(100);
     }
@@ -30,10 +30,10 @@ unsigned char stmp[8] = {0, 1, 2, 3, 4, 5, 6, 7};
 
 void loop() {
 
-    CAN.sendMsgBuf(0x01, 0, 8, stmp);
+    CAN.sendMsgBuf(0x01, 0, 8, stmp);       // send a standard frame to id 0x01
     delay(10);
-    CAN.sendMsgBuf(0x04, 0, 8, stmp);
-    delay(500);                       // send data per 100ms
+    CAN.sendMsgBuf(0x04, 1, 8, stmp);       // send a extended frame to id 0x04
+    delay(100);                       // send data per 100ms
     Serial.println("CAN BUS sendMsgBuf ok!");
 }
 

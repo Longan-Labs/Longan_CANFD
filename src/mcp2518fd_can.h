@@ -58,7 +58,7 @@ const uint8_t BitReverseTable256[256] = {
     0x1B, 0x9B, 0x5B, 0xDB, 0x3B, 0xBB, 0x7B, 0xFB, 0x07, 0x87, 0x47, 0xC7,
     0x27, 0xA7, 0x67, 0xE7, 0x17, 0x97, 0x57, 0xD7, 0x37, 0xB7, 0x77, 0xF7,
     0x0F, 0x8F, 0x4F, 0xCF, 0x2F, 0xAF, 0x6F, 0xEF, 0x1F, 0x9F, 0x5F, 0xDF,
-    0x3F, 0xBF, 0x7F, 0xFF};
+0x3F, 0xBF, 0x7F, 0xFF};
 
 //! Look-up table for CRC calculation
 const uint16_t crc16_table[256] = {
@@ -90,59 +90,58 @@ const uint16_t crc16_table[256] = {
     0x0246, 0x024C, 0x8249, 0x0258, 0x825D, 0x8257, 0x0252, 0x0270, 0x8275,
     0x827F, 0x027A, 0x826B, 0x026E, 0x0264, 0x8261, 0x0220, 0x8225, 0x822F,
     0x022A, 0x823B, 0x023E, 0x0234, 0x8231, 0x8213, 0x0216, 0x021C, 0x8219,
-    0x0208, 0x820D, 0x8207, 0x0202};
+0x0208, 0x820D, 0x8207, 0x0202};
 
 class SPIClass;
 
-class mcp2518fd : public MCP_CAN {
-public:
-  mcp2518fd(byte _CS) : MCP_CAN(_CS), nReservedTx(0){};
+class mcp2518fd : public MCP_CAN_1 {
+    public:
+    mcp2518fd(byte _CS) : MCP_CAN_1(_CS), nReservedTx(0){};
 
-public:
-  virtual void
-  enableTxInterrupt(bool enable = true); // enable transmit interrupt
-  virtual void reserveTxBuffers(byte nTxBuf = 0) {
-    nReservedTx = (nTxBuf < 3 ? nTxBuf : 3 - 1);
-  }
-  virtual byte getLastTxBuffer() {
-    return 3 - 1; // read index of last tx buffer
-  }
+    public:
+    virtual void
+    enableTxInterrupt(bool enable = true); // enable transmit interrupt
+    virtual void reserveTxBuffers(byte nTxBuf = 0) {
+        nReservedTx = (nTxBuf < 3 ? nTxBuf : 3 - 1);
+    }
+    virtual byte getLastTxBuffer() {
+        return 3 - 1; // read index of last tx buffer
+    }
   /*
    * speedset could be in MCP_BITTIME_SETUP,
    *          or fill by CANFD::BITRATE()
    */
-  virtual byte begin(uint32_t speedset,
-                     const byte clockset = MCP2518FD_20MHz); // init can
-  virtual byte init_Mask(byte num, byte ext, unsigned long ulData);
-  virtual byte init_Filt(byte num, byte ext,
-                         unsigned long ulData); // init filters
-                         
-  virtual byte CANFDSPI_FilterDisable(CAN_FILTER filter);
-                         
-  virtual byte init_Filt_Mask(byte num, byte ext, unsigned long f, unsigned long m);
-  
-  virtual void setSleepWakeup(const byte enable);
-  virtual byte sleep();
-  virtual byte wake();
-  virtual byte __setMode(const byte opMode);
+    virtual byte begin(uint32_t speedset,
+    const byte clockset = MCP2518FD_20MHz); // init can
 
-  virtual byte setMode(const byte opMode)
+    virtual byte CANFDSPI_FilterDisable(CAN_FILTER filter);
+
+    virtual byte init_Filt_Mask(byte num, byte ext, unsigned long f, unsigned long m);
+
+    virtual void setSleepWakeup(const byte enable);
+    virtual byte sleep();
+    virtual byte wake();
+    virtual byte __setMode(const byte opMode);
+
+    virtual byte setMode(const byte opMode)
     {
-    if ((CAN_OPERATION_MODE)opMode !=
-    CAN_SLEEP_MODE) { // if going to sleep, the value stored in opMode is not
-                        // changed so that we can return to it later
-        mcpMode = (CAN_OPERATION_MODE)opMode;
+        if ((CAN_OPERATION_MODE)opMode != CAN_SLEEP_MODE)
+        { // if going to sleep, the value stored in opMode is not
+            // changed so that we can return to it later
+            mcpMode = (CAN_OPERATION_MODE)opMode;
+        }
+        
+        return (byte)mcpMode;
     }
-  }
-  virtual byte getMode();
-  virtual byte checkError(uint8_t* err_ptr = NULL);
+    virtual byte getMode();
+    virtual byte checkError(uint8_t* err_ptr = NULL);
 
   /* ---- receiving ---- */
-  virtual byte checkReceive(void);
-  virtual byte readMsgBufID(byte status, volatile unsigned long *id,
-                            volatile byte *ext, volatile byte *rtr,
-                            volatile byte *len,
-                            volatile byte *buf); // read buf with object ID
+    virtual byte checkReceive(void);
+    virtual byte readMsgBufID(byte status, volatile unsigned long *id,
+    volatile byte *ext, volatile byte *rtr,
+    volatile byte *len,
+    volatile byte *buf); // read buf with object ID
     /* wrapper */
     byte readMsgBufID(unsigned long *ID, byte *len, byte *buf) {
         return readMsgBufID(readRxTxStatus(), ID, &ext_flg, &rtr, len, buf);
@@ -162,147 +161,147 @@ public:
    *       CAN_DLC_48(14)             = 48 bytes
    *       CAN_DLC_64(15)             = 64 bytes
    */
-  virtual byte trySendMsgBuf(unsigned long id, byte ext, byte rtr, byte dlc,
-                             const byte *buf, byte iTxBuf = 0xff);
-  virtual byte sendMsgBuf(byte status, unsigned long id, byte ext, byte rtr,
-                          byte dlc, volatile const byte *buf);
-  virtual byte sendMsgBuf(unsigned long id, byte ext, byte rtr, byte dlc,
-                          const byte *buf, bool wait_sent = true);
+    virtual byte trySendMsgBuf(unsigned long id, byte ext, byte rtr, byte dlc,
+    const byte *buf, byte iTxBuf = 0xff);
+    virtual byte sendMsgBuf(byte status, unsigned long id, byte ext, byte rtr,
+    byte dlc, volatile const byte *buf);
+    virtual byte sendMsgBuf(unsigned long id, byte ext, byte rtr, byte dlc,
+    const byte *buf, bool wait_sent = true);
   /* wrapper */
-  inline byte sendMsgBuf(unsigned long id, byte ext, byte len, const byte *buf) {
-    return sendMsgBuf(id, ext, 0, len, buf, true);
-  }
+    inline byte sendMsgBuf(unsigned long id, byte ext, byte len, const byte *buf) {
+        return sendMsgBuf(id, ext, 0, len, buf, true);
+    }
 
-  virtual void clearBufferTransmitIfFlags(byte flags = 0);
-  virtual byte readRxTxStatus(void);
-  virtual byte checkClearRxStatus(byte *status);
-  virtual byte checkClearTxStatus(byte *status, byte iTxBuf = 0xff);
-  virtual bool mcpPinMode(const byte pin, const byte mode);
-  virtual bool mcpDigitalWrite(const byte pin, const byte mode);
-  virtual byte mcpDigitalRead(const byte pin);
+    virtual void clearBufferTransmitIfFlags(byte flags = 0);
+    virtual byte readRxTxStatus(void);
+    virtual byte checkClearRxStatus(byte *status);
+    virtual byte checkClearTxStatus(byte *status, byte iTxBuf = 0xff);
+    virtual bool mcpPinMode(const byte pin, const byte mode);
+    virtual bool mcpDigitalWrite(const byte pin, const byte mode);
+    virtual byte mcpDigitalRead(const byte pin);
 
-private:
-  byte mcp2518fd_readMsgBufID(volatile byte *len, volatile byte *buf);
-  byte mcp2518fd_sendMsg(const byte *buf, byte len, unsigned long id, byte ext,
-                         byte rtr, bool wait_sent);
-  int8_t mcp2518fd_receiveMsg();
+    private:
+    byte mcp2518fd_readMsgBufID(volatile byte *len, volatile byte *buf);
+    byte mcp2518fd_sendMsg(const byte *buf, byte len, unsigned long id, byte ext,
+    byte rtr, bool wait_sent);
+    int8_t mcp2518fd_receiveMsg();
 
-private:
-  uint8_t mcp2518fd_init(uint32_t speedset, const byte clock); // mcp2518fdinit
-  int8_t mcp2518fd_reset(void);                            // reset mcp2518fd
-  int8_t mcp2518fd_EccEnable(void);                        // Section: ECC
-  int8_t mcp2518fd_RamInit(uint8_t d);
-  int8_t mcp2518fd_ConfigureObjectReset(CAN_CONFIG *config);
-  int8_t mcp2518fd_Configure(CAN_CONFIG *config);
-  int8_t
-  mcp2518fd_TransmitChannelConfigureObjectReset(CAN_TX_FIFO_CONFIG *config);
-  int8_t mcp2518fd_TransmitChannelConfigure(CAN_FIFO_CHANNEL channel,
-                                            CAN_TX_FIFO_CONFIG *config);
-  int8_t
-  mcp2518fd_ReceiveChannelConfigureObjectReset(CAN_RX_FIFO_CONFIG *config);
-  int8_t mcp2518fd_ReceiveChannelConfigure(CAN_FIFO_CHANNEL channel,
-                                           CAN_RX_FIFO_CONFIG *config);
-  int8_t mcp2518fd_FilterObjectConfigure(CAN_FILTER filter,
-                                         CAN_FILTEROBJ_ID *id);
-  int8_t mcp2518fd_FilterMaskConfigure(CAN_FILTER filter, CAN_MASKOBJ_ID *mask);
-  int8_t mcp2518fd_FilterToFifoLink(CAN_FILTER filter, CAN_FIFO_CHANNEL channel,
-                                    bool enable);
-  int8_t mcp2518fd_BitTimeConfigure(uint32_t speedset,
-                                    CAN_SSP_MODE sspMode, CAN_SYSCLK_SPEED clk);
-  int8_t mcp2518fd_GpioModeConfigure(GPIO_PIN_MODE gpio0, GPIO_PIN_MODE gpio1);
-  int8_t mcp2518fd_TransmitChannelEventEnable(CAN_FIFO_CHANNEL channel,
-                                              CAN_TX_FIFO_EVENT flags);
-  int8_t mcp2518fd_ReceiveChannelEventEnable(CAN_FIFO_CHANNEL channel,
-                                             CAN_RX_FIFO_EVENT flags);
-  int8_t mcp2518fd_ModuleEventEnable(CAN_MODULE_EVENT flags);
-  int8_t mcp2518fd_OperationModeSelect(CAN_OPERATION_MODE opMode);
-  CAN_OPERATION_MODE mcp2518fd_OperationModeGet();
-  void mcp2518fd_TransmitMessageQueue();
-  int8_t mcp2518fd_TransmitChannelEventGet(CAN_FIFO_CHANNEL channel,
-                                           CAN_TX_FIFO_EVENT *flags);
-  int8_t mcp2518fd_ErrorCountStateGet(uint8_t *tec, uint8_t *rec,
-                                      CAN_ERROR_STATE *flags);
-  int8_t mcp2518fd_TransmitChannelLoad(CAN_FIFO_CHANNEL channel,
-                                       CAN_TX_MSGOBJ *txObj, uint8_t *txd,
-                                       uint32_t txdNumBytes, bool flush);
-  int8_t mcp2518fd_ReceiveChannelEventGet(CAN_FIFO_CHANNEL channel,
-                                          CAN_RX_FIFO_EVENT *flags);
-  int8_t mcp2518fd_ReceiveMessageGet(CAN_FIFO_CHANNEL channel,
-                                     CAN_RX_MSGOBJ *rxObj, uint8_t *rxd,
-                                     uint8_t nBytes);
-  int8_t mcp2518fd_ReceiveChannelUpdate(CAN_FIFO_CHANNEL channel);
-  int8_t mcp2518fd_TransmitChannelUpdate(CAN_FIFO_CHANNEL channel, bool flush);
-  int8_t mcp2518fd_ReceiveChannelStatusGet(CAN_FIFO_CHANNEL channel,
-                                           CAN_RX_FIFO_STATUS *status);
-  int8_t mcp2518fd_ErrorStateGet(CAN_ERROR_STATE *flags);
-  int8_t mcp2518fd_ModuleEventRxCodeGet(CAN_RXCODE *rxCode);
-  int8_t mcp2518fd_ModuleEventTxCodeGet(CAN_TXCODE *txCode);
-  int8_t mcp2518fd_TransmitChannelEventAttemptClear(CAN_FIFO_CHANNEL channel);
+    private:
+    uint8_t mcp2518fd_init(uint32_t speedset, const byte clock); // mcp2518fdinit
+    int8_t mcp2518fd_reset(void);                            // reset mcp2518fd
+    int8_t mcp2518fd_EccEnable(void);                        // Section: ECC
+    int8_t mcp2518fd_RamInit(uint8_t d);
+    int8_t mcp2518fd_ConfigureObjectReset(CAN_CONFIG *config);
+    int8_t mcp2518fd_Configure(CAN_CONFIG *config);
+    int8_t
+    mcp2518fd_TransmitChannelConfigureObjectReset(CAN_TX_FIFO_CONFIG *config);
+    int8_t mcp2518fd_TransmitChannelConfigure(CAN_FIFO_CHANNEL channel,
+    CAN_TX_FIFO_CONFIG *config);
+    int8_t
+    mcp2518fd_ReceiveChannelConfigureObjectReset(CAN_RX_FIFO_CONFIG *config);
+    int8_t mcp2518fd_ReceiveChannelConfigure(CAN_FIFO_CHANNEL channel,
+    CAN_RX_FIFO_CONFIG *config);
+    int8_t mcp2518fd_FilterObjectConfigure(CAN_FILTER filter,
+    CAN_FILTEROBJ_ID *id);
+    int8_t mcp2518fd_FilterMaskConfigure(CAN_FILTER filter, CAN_MASKOBJ_ID *mask);
+    int8_t mcp2518fd_FilterToFifoLink(CAN_FILTER filter, CAN_FIFO_CHANNEL channel,
+    bool enable);
+    int8_t mcp2518fd_BitTimeConfigure(uint32_t speedset,
+    CAN_SSP_MODE sspMode, CAN_SYSCLK_SPEED clk);
+    int8_t mcp2518fd_GpioModeConfigure(GPIO_PIN_MODE gpio0, GPIO_PIN_MODE gpio1);
+    int8_t mcp2518fd_TransmitChannelEventEnable(CAN_FIFO_CHANNEL channel,
+    CAN_TX_FIFO_EVENT flags);
+    int8_t mcp2518fd_ReceiveChannelEventEnable(CAN_FIFO_CHANNEL channel,
+    CAN_RX_FIFO_EVENT flags);
+    int8_t mcp2518fd_ModuleEventEnable(CAN_MODULE_EVENT flags);
+    int8_t mcp2518fd_OperationModeSelect(CAN_OPERATION_MODE opMode);
+    CAN_OPERATION_MODE mcp2518fd_OperationModeGet();
+    void mcp2518fd_TransmitMessageQueue();
+    int8_t mcp2518fd_TransmitChannelEventGet(CAN_FIFO_CHANNEL channel,
+    CAN_TX_FIFO_EVENT *flags);
+    int8_t mcp2518fd_ErrorCountStateGet(uint8_t *tec, uint8_t *rec,
+    CAN_ERROR_STATE *flags);
+    int8_t mcp2518fd_TransmitChannelLoad(CAN_FIFO_CHANNEL channel,
+    CAN_TX_MSGOBJ *txObj, uint8_t *txd,
+    uint32_t txdNumBytes, bool flush);
+    int8_t mcp2518fd_ReceiveChannelEventGet(CAN_FIFO_CHANNEL channel,
+    CAN_RX_FIFO_EVENT *flags);
+    int8_t mcp2518fd_ReceiveMessageGet(CAN_FIFO_CHANNEL channel,
+    CAN_RX_MSGOBJ *rxObj, uint8_t *rxd,
+    uint8_t nBytes);
+    int8_t mcp2518fd_ReceiveChannelUpdate(CAN_FIFO_CHANNEL channel);
+    int8_t mcp2518fd_TransmitChannelUpdate(CAN_FIFO_CHANNEL channel, bool flush);
+    int8_t mcp2518fd_ReceiveChannelStatusGet(CAN_FIFO_CHANNEL channel,
+    CAN_RX_FIFO_STATUS *status);
+    int8_t mcp2518fd_ErrorStateGet(CAN_ERROR_STATE *flags);
+    int8_t mcp2518fd_ModuleEventRxCodeGet(CAN_RXCODE *rxCode);
+    int8_t mcp2518fd_ModuleEventTxCodeGet(CAN_TXCODE *txCode);
+    int8_t mcp2518fd_TransmitChannelEventAttemptClear(CAN_FIFO_CHANNEL channel);
 
-  int8_t mcp2518fd_LowPowerModeEnable();
-  int8_t mcp2518fd_LowPowerModeDisable();
+    int8_t mcp2518fd_LowPowerModeEnable();
+    int8_t mcp2518fd_LowPowerModeDisable();
 
-  int8_t mcp2518fd_ReadByte(uint16_t address, uint8_t *rxd);
-  int8_t mcp2518fd_WriteByte(uint16_t address, uint8_t txd);
-  int8_t mcp2518fd_ReadWord(uint16_t address, uint32_t *rxd);
-  int8_t mcp2518fd_WriteWord(uint16_t address, uint32_t txd);
-  int8_t mcp2518fd_ReadHalfWord(uint16_t address, uint16_t *rxd);
-  int8_t mcp2518fd_WriteHalfWord(uint16_t address, uint16_t txd);
-  int8_t mcp2518fd_ReadByteArray(uint16_t address, uint8_t *rxd,
-                                 uint16_t nBytes);
-  int8_t mcp2518fd_WriteByteArray(uint16_t address, uint8_t *txd,
-                                  uint16_t nBytes);
-  int8_t mcp2518fd_WriteByteSafe(uint16_t address, uint8_t txd);
-  int8_t mcp2518fd_WriteWordSafe(uint16_t address, uint32_t txd);
-  int8_t mcp2518fd_ReadByteArrayWithCRC(uint16_t address, uint8_t *rxd,
-                                        uint16_t nBytes, bool fromRam,
-                                        bool *crcIsCorrect);
-  int8_t mcp2518fd_WriteByteArrayWithCRC(uint16_t address, uint8_t *txd,
-                                         uint16_t nBytes, bool fromRam);
-  int8_t mcp2518fd_ReadWordArray(uint16_t address, uint32_t *rxd,
-                                 uint16_t nWords);
-  int8_t mcp2518fd_WriteWordArray(uint16_t address, uint32_t *txd,
-                                  uint16_t nWords);
+    int8_t mcp2518fd_ReadByte(uint16_t address, uint8_t *rxd);
+    int8_t mcp2518fd_WriteByte(uint16_t address, uint8_t txd);
+    int8_t mcp2518fd_ReadWord(uint16_t address, uint32_t *rxd);
+    int8_t mcp2518fd_WriteWord(uint16_t address, uint32_t txd);
+    int8_t mcp2518fd_ReadHalfWord(uint16_t address, uint16_t *rxd);
+    int8_t mcp2518fd_WriteHalfWord(uint16_t address, uint16_t txd);
+    int8_t mcp2518fd_ReadByteArray(uint16_t address, uint8_t *rxd,
+    uint16_t nBytes);
+    int8_t mcp2518fd_WriteByteArray(uint16_t address, uint8_t *txd,
+    uint16_t nBytes);
+    int8_t mcp2518fd_WriteByteSafe(uint16_t address, uint8_t txd);
+    int8_t mcp2518fd_WriteWordSafe(uint16_t address, uint32_t txd);
+    int8_t mcp2518fd_ReadByteArrayWithCRC(uint16_t address, uint8_t *rxd,
+    uint16_t nBytes, bool fromRam,
+    bool *crcIsCorrect);
+    int8_t mcp2518fd_WriteByteArrayWithCRC(uint16_t address, uint8_t *txd,
+    uint16_t nBytes, bool fromRam);
+    int8_t mcp2518fd_ReadWordArray(uint16_t address, uint32_t *rxd,
+    uint16_t nWords);
+    int8_t mcp2518fd_WriteWordArray(uint16_t address, uint32_t *txd,
+    uint16_t nWords);
 
-private:
-  int8_t
-  mcp2518fd_BitTimeConfigureNominal(void);
-  int8_t mcp2518fd_BitTimeConfigureData(CAN_SSP_MODE sspMode);
+    private:
+    int8_t
+    mcp2518fd_BitTimeConfigureNominal(void);
+    int8_t mcp2518fd_BitTimeConfigureData(CAN_SSP_MODE sspMode);
 
-  byte nReservedTx;     // Count of tx buffers for reserved send
-  CAN_OPERATION_MODE mcpMode = CAN_CLASSIC_MODE; // Current controller mode
+    byte nReservedTx;     // Count of tx buffers for reserved send
+    CAN_OPERATION_MODE mcpMode = CAN_CLASSIC_MODE; // Current controller mode
 
 
-  uint32_t bittime_compat_to_mcp2518fd(uint32_t speedset);
-  int calcBittime(const uint32_t inDesiredArbitrationBitRate,
-                  const uint32_t inTolerancePPM = 10000/* 1% */);
+    uint32_t bittime_compat_to_mcp2518fd(uint32_t speedset);
+    int calcBittime(const uint32_t inDesiredArbitrationBitRate,
+    const uint32_t inTolerancePPM = 10000/* 1% */);
 
-  uint32_t mSysClock;   // PLL disabled, mSysClock = Oscillator Frequency
-  uint32_t mDesiredArbitrationBitRate; // desired ArbitrationBitRate
-  uint8_t  mDataBitRateFactor; // multiplier between ArbitrationBitRate and DataBitrate
-  //--- Data bit rate; if mDataBitRateFactor==1, theses properties are not used for configuring the MCP2517FD.
-  uint8_t mDataPhaseSegment1 = 0 ; // if mDataBitRateFactor > 1: 2...32, else equal to mArbitrationPhaseSegment1
-  uint8_t mDataPhaseSegment2 = 0 ; // if mDataBitRateFactor > 1: 1...16, else equal to mArbitrationPhaseSegment2
-  uint8_t mDataSJW = 0 ; // if mDataBitRateFactor > 1: 1...16, else equal to mArbitrationSJW
-  //--- Bit rate prescaler is common to arbitration and data bit rates
-  uint16_t mBitRatePrescaler = 0 ; // 1...256
-  //--- Arbitration bit rate
-  uint16_t mArbitrationPhaseSegment1 = 0 ; // 2...256
-  uint8_t mArbitrationPhaseSegment2 = 0 ; // 1...128
-  uint8_t mArbitrationSJW = 0 ; // 1...128
-  bool mArbitrationBitRateClosedToDesiredRate = false ; // The above configuration is not correct
-  //--- Transmitter Delay Compensation Offset
-  int8_t mTDCO = 0 ; // -64 ... +63
+    uint32_t mSysClock;   // PLL disabled, mSysClock = Oscillator Frequency
+    uint32_t mDesiredArbitrationBitRate; // desired ArbitrationBitRate
+    uint8_t  mDataBitRateFactor; // multiplier between ArbitrationBitRate and DataBitrate
+    //--- Data bit rate; if mDataBitRateFactor==1, theses properties are not used for configuring the MCP2517FD.
+    uint8_t mDataPhaseSegment1 = 0 ; // if mDataBitRateFactor > 1: 2...32, else equal to mArbitrationPhaseSegment1
+    uint8_t mDataPhaseSegment2 = 0 ; // if mDataBitRateFactor > 1: 1...16, else equal to mArbitrationPhaseSegment2
+    uint8_t mDataSJW = 0 ; // if mDataBitRateFactor > 1: 1...16, else equal to mArbitrationSJW
+    //--- Bit rate prescaler is common to arbitration and data bit rates
+    uint16_t mBitRatePrescaler = 0 ; // 1...256
+    //--- Arbitration bit rate
+    uint16_t mArbitrationPhaseSegment1 = 0 ; // 2...256
+    uint8_t mArbitrationPhaseSegment2 = 0 ; // 1...128
+    uint8_t mArbitrationSJW = 0 ; // 1...128
+    bool mArbitrationBitRateClosedToDesiredRate = false ; // The above configuration is not correct
+    //--- Transmitter Delay Compensation Offset
+    int8_t mTDCO = 0 ; // -64 ... +63
 };
 
 /* CANFD Auxiliary helper */
 class CANFD {
-public:
-  static byte dlc2len(byte dlc);
-  static byte len2dlc(byte len);
-  static uint32_t BITRATE(uint32_t arbitration, uint8_t factor) {
-    return ((uint32_t)factor << 24) | (arbitration & 0xFFFFFUL);
-  }
+    public:
+    static byte dlc2len(byte dlc);
+    static byte len2dlc(byte len);
+    static uint32_t BITRATE(uint32_t arbitration, uint8_t factor) {
+        return ((uint32_t)factor << 24) | (arbitration & 0xFFFFFUL);
+    }
 };
 
 #endif

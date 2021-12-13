@@ -18,7 +18,7 @@ mcp2518fd CAN(SPI_CS_PIN); // Set CS pin
 void setup() {
     Serial.begin(115200);
 
-    while (CAN_OK != CAN.begin(CAN_500KBPS)) {             // init can bus : baudrate = 500k
+    while (CAN_OK != CAN.begin(CANFD_500KBPS)) {             // init can bus : baudrate = 500k
         Serial.println("CAN init fail, retry...");
         delay(100);
     }
@@ -30,13 +30,16 @@ void loop() {
     unsigned char len = 0;
     unsigned char buf[8];
 
-    if (CAN_MSGAVAIL == CAN.checkReceive()) {         // check if data coming
+    if (CAN_MSGAVAIL == CAN.checkReceive())         // // check if data coming
+    {         
     
         CAN.readMsgBuf(&len, buf);            // You should call readMsgBuff before getCanId
         unsigned long id = CAN.getCanId();
+        unsigned char ext = CAN.isExtendedFrame();
         
-        Serial.print("Get Data From id: ");
-        Serial.println(id);
+        Serial.print(ext ? "GET EXTENDED FRAME FROM ID: 0X" : "GET STANDARD FRAME FROM ID: 0X");
+        Serial.println(id, HEX);
+        
         Serial.print("Len = ");
         Serial.println(len);
             // print the data

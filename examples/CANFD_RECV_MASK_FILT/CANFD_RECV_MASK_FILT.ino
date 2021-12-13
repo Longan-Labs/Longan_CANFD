@@ -55,14 +55,10 @@ void setup() {
     }
     Serial.println("CAN init ok!");
     
-    // set mask and filter, there are 32 mask/filter for MCP2517/8FD, 0-31
-    
-    int filtn  = 0;         // 0~31, 32 mask and filter
-    int ext    = 0;         // 0: standard frame, 1: ext frame
-    int filter = 0x04;      // filter
-    int mask   = 0x7ff;     // mask
-    
-    CAN.init_Filt_Mask(filtn, ext, 0x04, 0x7ff);
+    // init_Filt_Mask(filter number, ext, filter, mask)
+    // There're 32 set of filter/mask for MCP2517FD, filter number can be set to 0~31
+    CAN.init_Filt_Mask(0, 0, 0, 0);     // get all standard frame 
+    CAN.init_Filt_Mask(1, 1, 0, 0);     // get all extended frame
 
 }
 

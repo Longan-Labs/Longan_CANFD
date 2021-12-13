@@ -109,7 +109,7 @@ extern "C" {
 
 // The filters start right after the FIFO control/status registers
 #define cREGADDR_CiFLTCON                                                      \
-  (cREGADDR_CiFIFOCON + (CiFIFO_OFFSET * CAN_FIFO_TOTAL_CHANNELS))
+  (cREGADDR_CiFIFOCON + (CiFIFO_OFFSET * CAN_FIFO_TOTAL_CHANNELS))              // 0x50+12*32
 #define cREGADDR_CiFLTOBJ (cREGADDR_CiFLTCON + CAN_FIFO_TOTAL_CHANNELS)
 #define cREGADDR_CiMASK (cREGADDR_CiFLTOBJ + 4)
 

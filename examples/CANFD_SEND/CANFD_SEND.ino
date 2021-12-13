@@ -67,9 +67,6 @@ void loop()
     // send data:  id = 0x00, standrad frame, data len = 64, stmp: data buf
     CAN.sendMsgBuf(0x01, 0, CANFD::len2dlc(MAX_DATA_SIZE), stmp);
     delay(10);
-    CAN.sendMsgBuf(0x04, 0, CANFD::len2dlc(MAX_DATA_SIZE), stmp);
-    delay(500);                       // send data per 100ms
-    Serial.println("CAN BUS sendMsgBuf ok!");
 }
 
 // END FILE

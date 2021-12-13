@@ -19,5 +19,4 @@ If you need a Dev board, plese try,
 If you have any question, please feel free to contact [support@longan-labs.cc](support@longan-labs.cc)
 
 
-
 [![Analytics](https://ga-beacon.appspot.com/UA-101965714-1/Longan_CANFD)](https://github.com/igrigorik/ga-beacon)

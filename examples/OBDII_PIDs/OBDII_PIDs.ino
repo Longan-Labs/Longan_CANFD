@@ -38,22 +38,11 @@ unsigned char PID_INPUT;
 unsigned char getPid    = 0;
 
 void set_mask_filt() {
-    /*
-        set mask, set both the mask to 0x3ff
-    */
-    CAN.init_Mask(0, 0, 0x7FC);
-    CAN.init_Mask(1, 0, 0x7FC);
 
-    /*
-        set filter, we can receive id from 0x04 ~ 0x09
-    */
-    CAN.init_Filt(0, 0, 0x7E8);
-    CAN.init_Filt(1, 0, 0x7E8);
-
-    CAN.init_Filt(2, 0, 0x7E8);
-    CAN.init_Filt(3, 0, 0x7E8);
-    CAN.init_Filt(4, 0, 0x7E8);
-    CAN.init_Filt(5, 0, 0x7E8);
+    // init_Filt_Mask(filter number, ext, filter, mask)
+    // There're 32 set of filter/mask for MCP2517FD, filter number can be set to 0~31
+    CAN.init_Filt_Mask(0, 0, 0x7E8, 0x7FC);  
+    
 }
 
 void sendPid(unsigned char __pid) {
@@ -67,7 +56,7 @@ void setup() {
     Serial.begin(115200);
     while(!Serial){};
 
-    while (CAN_OK != CAN.begin(CAN_500KBPS)) {             // init can bus : baudrate = 500k
+    while (CAN_OK != CAN.begin(CANFD_500KBPS)) {             // init can bus : baudrate = 500k
         Serial.println("CAN init fail, retry...");
         delay(100);
     }
