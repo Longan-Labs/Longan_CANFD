@@ -1,27 +1,3 @@
-<<<<<<< HEAD
-![](https://www.longan-labs.cc/media/wysiwyg/Categories/Categories-40.png)
-
-This library is wrote for MCP2517 MCP2518, and it's available for most Arduino board, we test it with Arduino UNO, Leonardo, Mega as well as Zero.
-
-With this library, you can,
-
-1. Send a CAN2.0 frame
-2. Receive a CAN2.0 frame
-3. Send a CAN FD frame
-4. Send a CAN FD frame
-5. Set the masks and filters, there're 32 masks and filters. 
-
-If you need a Dev board, plese try,
-
-[CAN FD Shield for Arduino](https://www.longan-labs.cc/1030012.html)
-
-[CANBed FD](https://www.longan-labs.cc/1030009.html)
-
-If you have any question, please feel free to contact [support@longan-labs.cc](support@longan-labs.cc)
-
-
-[![Analytics](https://ga-beacon.appspot.com/UA-101965714-1/Longan_CANFD)](https://github.com/igrigorik/ga-beacon)
-=======
 # Longan Labs CAN FD Library 
 
 [![Actions Status](https://github.com/arduino/arduino-cli-example/workflows/test/badge.svg)](https://github.com/arduino/arduino-cli-example/actions)
@@ -180,7 +156,3 @@ SOFTWARE.
 ## Contact us
 
 If you have any question, please feel free to contact [support@longan-labs.cc](support@longan-labs.cc)
-
-
-[![Analytics](https://ga-beacon.appspot.com/UA-101965714-1/Longan_CANFD)](https://github.com/igrigorik/ga-beacon)
->>>>>>> 7c658741347535596dce7b20ba791fef36d221f9
