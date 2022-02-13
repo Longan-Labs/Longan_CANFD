@@ -18,7 +18,6 @@
     CAN_500K_3M
     CAN_500K_4M
     CAN_1000K_4M
-
 */
 
 #include <SPI.h>
@@ -42,9 +41,7 @@ unsigned char buf[MAX_DATA_SIZE];
 
 void setup() {
     Serial.begin(115200);
-    while (!Serial) {
-        ; // wait for serial port to connect. Needed for native USB port only
-    }
+    while (!Serial);
     //attachInterrupt(digitalPinToInterrupt(CAN_INT_PIN), CAN_ISR, FALLING); // start interrupt
     CAN.setMode(CAN_NORMAL_MODE);
 

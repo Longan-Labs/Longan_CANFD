@@ -42,9 +42,7 @@ unsigned char buf[MAX_DATA_SIZE];
 
 void setup() {
     Serial.begin(115200);
-    while (!Serial) {
-        ; // wait for serial port to connect. Needed for native USB port only
-    }
+    while (!Serial);
 
     CAN.setMode(CAN_NORMAL_MODE);
 

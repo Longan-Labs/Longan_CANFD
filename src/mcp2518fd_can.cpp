@@ -60,7 +60,7 @@ byte mcp2518fd::begin(uint32_t speedset, const byte clockset) {
 
   /* compatible layer translation */
     speedset = bittime_compat_to_mcp2518fd(speedset);
-
+    if(speedset > CAN20_1000KBPS)__flgFDF = 1;
     byte res = mcp2518fd_init(speedset, clockset);
     return res;
 }
@@ -1770,7 +1770,11 @@ byte ext, byte rtr, bool wait_sent) {
 
     txObj.bF.ctrl.BRS = true;
 
-    txObj.bF.ctrl.FDF = (len > 8);
+    //txObj.bF.ctrl.FDF = (len > 8);
+    txObj.bF.ctrl.FDF = __flgFDF;
+    //if(__flgFDF)
+        
+    
     n = DRV_CANFDSPI_DlcToDataBytes((CAN_DLC)txObj.bF.ctrl.DLC);
     // Prepare data
     for (i = 0; i < n; i++) {
@@ -1799,26 +1803,26 @@ uint32_t mcp2518fd::bittime_compat_to_mcp2518fd(uint32_t speedset) {
         return speedset;
     }
     switch (speedset) {
-        case CANFD_5KBPS:   r = CANFD::BITRATE(   5000UL, 0); break;
-        case CANFD_10KBPS:  r = CANFD::BITRATE(  10000UL, 0); break;
-        case CANFD_20KBPS:  r = CANFD::BITRATE(  20000UL, 0); break;
-        case CANFD_25KBPS:  r = CANFD::BITRATE(  25000UL, 0); break;
-        case CANFD_31K25BPS:r = CANFD::BITRATE(  31250UL, 0); break;
-        case CANFD_33KBPS:  r = CANFD::BITRATE(  33000UL, 0); break;
-        case CANFD_40KBPS:  r = CANFD::BITRATE(  40000UL, 0); break;
-        case CANFD_50KBPS:  r = CANFD::BITRATE(  50000UL, 0); break;
-        case CANFD_80KBPS:  r = CANFD::BITRATE(  80000UL, 0); break;
-        case CANFD_83K3BPS: r = CANFD::BITRATE(  83300UL, 0); break;
-        case CANFD_95KBPS:  r = CANFD::BITRATE(  95000UL, 0); break;
-        case CANFD_100KBPS: r = CANFD::BITRATE( 100000UL, 0); break;
-        case CANFD_125KBPS: r = CANFD::BITRATE( 125000UL, 0); break;
-        case CANFD_200KBPS: r = CANFD::BITRATE( 200000UL, 0); break;
-        case CANFD_250KBPS: r = CANFD::BITRATE( 250000UL, 0); break;
+        case CAN20_5KBPS:   r = CANFD::BITRATE(   5000UL, 0); break;
+        case CAN20_10KBPS:  r = CANFD::BITRATE(  10000UL, 0); break;
+        case CAN20_20KBPS:  r = CANFD::BITRATE(  20000UL, 0); break;
+        case CAN20_25KBPS:  r = CANFD::BITRATE(  25000UL, 0); break;
+        case CAN20_31K25BPS:r = CANFD::BITRATE(  31250UL, 0); break;
+        case CAN20_33KBPS:  r = CANFD::BITRATE(  33000UL, 0); break;
+        case CAN20_40KBPS:  r = CANFD::BITRATE(  40000UL, 0); break;
+        case CAN20_50KBPS:  r = CANFD::BITRATE(  50000UL, 0); break;
+        case CAN20_80KBPS:  r = CANFD::BITRATE(  80000UL, 0); break;
+        case CAN20_83K3BPS: r = CANFD::BITRATE(  83300UL, 0); break;
+        case CAN20_95KBPS:  r = CANFD::BITRATE(  95000UL, 0); break;
+        case CAN20_100KBPS: r = CANFD::BITRATE( 100000UL, 0); break;
+        case CAN20_125KBPS: r = CANFD::BITRATE( 125000UL, 0); break;
+        case CAN20_200KBPS: r = CANFD::BITRATE( 200000UL, 0); break;
+        case CAN20_250KBPS: r = CANFD::BITRATE( 250000UL, 0); break;
         default:
-        case CANFD_500KBPS: r = CANFD::BITRATE( 500000UL, 0); break;
-        case CANFD_666KBPS: r = CANFD::BITRATE( 666000UL, 0); break;
-        case CANFD_800KBPS: r = CANFD::BITRATE( 800000UL, 0); break;
-        case CANFD_1000KBPS:r = CANFD::BITRATE(1000000UL, 0); break;
+        case CAN20_500KBPS: r = CANFD::BITRATE( 500000UL, 0); break;
+        case CAN20_666KBPS: r = CANFD::BITRATE( 666000UL, 0); break;
+        case CAN20_800KBPS: r = CANFD::BITRATE( 800000UL, 0); break;
+        case CAN20_1000KBPS:r = CANFD::BITRATE(1000000UL, 0); break;
     }
     return r;
 }
@@ -2117,6 +2121,7 @@ byte mcp2518fd::mcp2518fd_readMsgBufID(volatile byte *len, volatile byte *buf) {
     for (int i = 0; i < n; i++) {
         buf[i] = rxd[i];
     }
+
     return 0;
 }
 

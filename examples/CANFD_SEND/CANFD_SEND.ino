@@ -26,12 +26,12 @@
 #define MAX_DATA_SIZE 64
 
 // pin for CAN-FD Shield
-const int SPI_CS_PIN = 9;
-const int CAN_INT_PIN = 2;
+//const int SPI_CS_PIN = 9;
+//const int CAN_INT_PIN = 2;
 
 // pin for CANBed FD
-//const int SPI_CS_PIN = 17;
-//const int CAN_INT_PIN = 7;
+const int SPI_CS_PIN = 17;
+const int CAN_INT_PIN = 7;
 
 mcp2518fd CAN(SPI_CS_PIN); // Set CS pin
 
@@ -45,10 +45,7 @@ void setup() {
     CAN.setMode(CAN_NORMAL_MODE);
 
     // init can bus : arbitration bitrate = 500k, data bitrate = 1M
-    while (0 != CAN.begin(CAN_500K_4M)) {
-        Serial.println("CAN init fail, retry...");
-        delay(100);
-    }
+    while (0 != CAN.begin(CAN_500K_4M));
     Serial.println("CAN init ok!");
 
     byte mode = CAN.getMode();
